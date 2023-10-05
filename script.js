@@ -71,31 +71,6 @@ const fproducts = [
   },
 ];
 
-let currentProductIndex = 0;
-
-function showPrevProduct() {
-  // Önceki ürünün dizinini hesaplayın
-  const prevProductIndex =
-    (currentProductIndex - 1 + productList.length) % productList.length;
-
-  // Önceki ürünü göstermek için fonksiyonu çağırın
-  showProductDetails(productList[prevProductIndex]);
-
-  // Şu anki ürünün dizinini güncelleyin
-  currentProductIndex = prevProductIndex;
-}
-
-function showNextProduct() {
-  // Sonraki ürünün dizinini hesaplayın
-  const nextProductIndex = (currentProductIndex + 1) % productList.length;
-
-  // Sonraki ürünü göstermek için fonksiyonu çağırın
-  showProductDetails(productList[nextProductIndex]);
-
-  // Şu anki ürünün dizinini güncelleyin
-  currentProductIndex = nextProductIndex;
-}
-
 // Ürün bilgilerini alt kısımda gösterme fonksiyonu
 function showProductDetails(product) {
   const modal = document.getElementById("product-details-modal");
@@ -108,8 +83,8 @@ function showProductDetails(product) {
         }</h2></div>
         <img class="product-image" src="${product.image}" alt="${product.name}">
         <div style="display:flex; justify-content:space-between;">
-            <button onclick="showNextProduct()" class="previous round">&#8249;</button>
-            <button onclick="showPrevProduct()" class="next round">&#8250;</button>
+            <button onclick="showPrevProduct()" class="previous round">&#8249;</button>
+            <button onclick="showNextProduct()" class="next round">&#8250;</button>
         </div>
         <p><span style="font-weight:bold; font-size:24px;">Fiyat:</span> $${product.price.toFixed(
           2
@@ -119,6 +94,34 @@ function showProductDetails(product) {
     `;
 
   modal.style.display = "block";
+}
+
+let currentProductIndex = 0; // Şu an görüntülenen ürünün dizinini takip etmek için bir değişken
+
+// Bir sonraki ürünü göstermek için işlev
+function showNextProduct() {
+  currentProductIndex++; // Şu anki üründen bir sonraki ürüne geç
+
+  // Dizinin sonuna ulaştığımızda ilk ürüne geri dön
+  if (currentProductIndex >= products.length) {
+    currentProductIndex = 0;
+  }
+
+  const nextProduct = products[currentProductIndex];
+  showProductDetails(nextProduct);
+}
+
+// Bir önceki ürünü göstermek için işlev
+function showPrevProduct() {
+  currentProductIndex--; // Şu anki üründen bir önceki ürüne geç
+
+  // Dizinin başına ulaştığımızda son ürüne git
+  if (currentProductIndex < 0) {
+    currentProductIndex = products.length - 1;
+  }
+
+  const prevProduct = products[currentProductIndex];
+  showProductDetails(prevProduct);
 }
 
 // Ürün detaylarını kapatma fonksiyonu
